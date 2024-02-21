@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom
 import { useSelector } from "react-redux";
 
 import { Login } from "./Login.jsx";
+import Home from "./Home.jsx";
 
 export function Base() {
     const ProtectedRoute = () => {
@@ -13,7 +14,7 @@ export function Base() {
             <Routes>
                 <Route path={"/login"} element={<Login />} />
                 <Route element={<ProtectedRoute />} >
-                    <Route path={"/"} element={<h1>Home</h1>} />
+                    <Route path={"/"} element={<Home/>} />
                     <Route path={"/about"} element={<h1>About</h1>} />
                     <Route path={"/profile"} element={<h1>Profile</h1>} />
                 </Route>
