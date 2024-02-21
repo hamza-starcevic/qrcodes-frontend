@@ -26,12 +26,12 @@ export function LoginForm() {
                     dispatch(login(res.data));
                     navigate("/");
                 } else {
-                    setToastMessage('Invalid credentials');
+                    setToastMessage(res.data.detail);
                     setOpenToast(true)
                 }
             }
             catch (error) {
-                setToastMessage('Invalid credentials');
+                setToastMessage(error.response.data.detail);
                 setOpenToast(true)
             }
         },
