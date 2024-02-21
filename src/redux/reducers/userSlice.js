@@ -1,14 +1,13 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     id: null,
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     isLoggedIn: false,
     token: null,
-    preferences: {
-        // ... user preferences
-    }
+    dateOfBirth: null,
 };
 
 const userSlice = createSlice(
@@ -20,7 +19,9 @@ const userSlice = createSlice(
                 // Update state for user login (e.g., Set isLoggedIn, user details)
                 state.isLoggedIn = true;
                 state.id = action.payload.id;
-                state.name = action.payload.name;
+                state.firstName = action.payload.firstName;
+                state.lastName = action.payload.lastName;
+                state.dateOfBirth = action.payload.dateOfBirth;
                 state.email = action.payload.email;
                 state.token = action.payload.token;
             },
@@ -37,6 +38,6 @@ const userSlice = createSlice(
 );
 
 
-export const {login, logout, updatePreferences} = userSlice.actions;
+export const { login, logout, updatePreferences } = userSlice.actions;
 export const selectUser = (state) => state.user.user;
 export default userSlice;

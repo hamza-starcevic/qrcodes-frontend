@@ -1,16 +1,39 @@
 import { useFormik } from "formik";
-import { Box, Button, Card, Container, CssBaseline, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, Card, Container, CssBaseline, Snackbar, Stack, TextField, Typography } from "@mui/material";
 import config from "../config";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/reducers/userSlice";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const BASE_URL = config.BASE_URL;
 export function LoginForm() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [openToast, setOpenToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
     const formik = useFormik({
         initialValues: {
             email: '',
             password: '',
         },
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit: async values => {
+            try {
+
+                const res = await axios.post(BASE_URL + "api/user/login", values)
+                if (res.status === 200) {
+                    dispatch(login(res.data));
+                    navigate("/");
+                } else {
+                    setToastMessage('Invalid credentials');
+                    setOpenToast(true)
+                }
+            }
+            catch (error) {
+                setToastMessage('Invalid credentials');
+                setOpenToast(true)
+            }
         },
 
     })
@@ -93,6 +116,16 @@ export function LoginForm() {
                     </Stack>
                 </Stack>
             </Card>
+            <Snackbar
+                open={openToast}
+                autoHideDuration={3000} // Adjust duration as needed
+                onClose={() => setOpenToast(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert severity="error" onClose={() => setOpenToast(false)}>
+                    {toastMessage}
+                </Alert>
+            </Snackbar>
         </Container >
     );
 }
