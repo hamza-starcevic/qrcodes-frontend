@@ -31,7 +31,7 @@ export function LoginForm() {
                 }
             }
             catch (error) {
-                setToastMessage(error.response.data.detail);
+                setToastMessage(error.response?.data.detail ?? "Problem u pristupu serveru");
                 setOpenToast(true)
             }
         },
