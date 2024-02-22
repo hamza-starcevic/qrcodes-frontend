@@ -4,6 +4,7 @@ import sessionStorage from "redux-persist/es/storage/session";
 import config from "../config";
 import persistReducer from "redux-persist/es/persistReducer";
 import persistStore from "redux-persist/es/persistStore";
+import loadingSlice from "./reducers/loadingSlice";
 
 
 const persistConfig = {
@@ -13,6 +14,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     user: userSlice,
+    loading: loadingSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
