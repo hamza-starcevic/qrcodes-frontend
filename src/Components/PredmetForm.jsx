@@ -13,19 +13,34 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import { commons } from "../config";
+import config, { commons } from "../config";
+import { useDispatch } from "react-redux";
+import { finishLoading, startLoading } from "../redux/reducers/loadingSlice";
+import axios from "axios";
 
 const years = Array.from({ length: 6 }, (_, i) => i + 1);
 
 const PredmetForm = () => {
+    const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {
             naziv: "",
             godinaStudija: "",
         },
-        onSubmit: (values) => {
-            // Handle form submission here
-            console.log("Submitting form:", values);
+        onSubmit: async (values) => {
+            console.log('hi')
+            dispatch(startLoading());
+            try {
+                const res = await axios.post(config.BASE_URL + "api/predmet/create", values)
+                console.log(res.data);
+                dispatch(finishLoading());
+            }
+
+            catch (error) {
+                dispatch(finishLoading());
+            } finally {
+                dispatch(finishLoading());
+            }
         },
     });
 
