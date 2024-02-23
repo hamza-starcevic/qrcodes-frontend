@@ -3,6 +3,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import EventIcon from '@mui/icons-material/Event';
+import { Link } from "react-router-dom";
 
 function Home() {
     return (
@@ -39,25 +40,30 @@ function Home() {
                 </Card>
 
                 {/*predmeti */}
-                <Card sx={{
-                    display: "flex",
-                    bgcolor: "#233d4d",
-                    width: "40vh",
-                    height: "25vh",
-                    alignItems: "center",
-                    flexDirection: "column"
-                }}>
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <AutoStoriesIcon sx={{ fontSize: "15vh", color: "whitesmoke" }} />
-                    </div>
-                    <Card sx={{ alignSelf: 'flex-end', width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: "1vh" }}>
-                        <Typography>
-                            Predmeti
-                        </Typography>
-                        <KeyboardTabIcon />
-                    </Card>
-                </Card>
+                <Link to={"/predmeti"} style={{
+                    textDecoration: 'none',
+                    color: 'inherit'
 
+                }}>
+                    <Card sx={{
+                        display: "flex",
+                        bgcolor: "#233d4d",
+                        width: "40vh",
+                        height: "25vh",
+                        alignItems: "center",
+                        flexDirection: "column"
+                    }}>
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                            <AutoStoriesIcon sx={{ fontSize: "15vh", color: "whitesmoke" }} />
+                        </div>
+                        <Card sx={{ alignSelf: 'flex-end', width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: "1vh" }}>
+                            <Typography>
+                                Predmeti
+                            </Typography>
+                            <KeyboardTabIcon />
+                        </Card>
+                    </Card>
+                </Link>
                 {/*predavanja */}
                 <Card sx={{
                     display: "flex",
