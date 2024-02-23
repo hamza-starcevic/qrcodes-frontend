@@ -12,6 +12,10 @@ import {
   Card,
   CardContent,
   CardHeader,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Stack,
   TextField,
 } from "@mui/material";
@@ -89,13 +93,29 @@ const KorisnikForm = ({
               value={formik.values.email}
               onChange={formik.handleChange}
             />
-            <TextField
-              fullWidth
-              label="Role"
-              name="role"
-              value={formik.values.role}
-              onChange={formik.handleChange}
-            />
+            <FormControl>
+              <InputLabel variant="filled" id="godina-studija-label">Role</InputLabel>
+              <Select
+                labelId="godina-studija-label"
+                label="Role"
+                name="role"
+                value={formik.values.role}
+                onChange={formik.handleChange}
+              >
+
+                <MenuItem key={"profesor"} value={"profesor"}>
+                  Profesor
+                </MenuItem>
+                <MenuItem key={"student"} value={"student"}>
+                  Student
+                </MenuItem>
+                <MenuItem key={"admin"} value={"admin"}>
+                  Admin
+                </MenuItem>
+
+              </Select>
+            </FormControl>
+
             <TextField
               fullWidth
               label="Password"
