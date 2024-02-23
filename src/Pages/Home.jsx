@@ -20,6 +20,11 @@ function Home() {
             }}>
 
                 {/*korisnici */}
+                <Link to={"/korisnici"} style={{
+                    textDecoration: 'none',
+                    color: 'inherit'
+
+                }}>
                 <Card sx={{
                     display: "flex",
                     bgcolor: "#5cab7d",
@@ -38,6 +43,7 @@ function Home() {
                         <KeyboardTabIcon />
                     </Card>
                 </Card>
+                </Link>
 
                 {/*predmeti */}
                 <Link to={"/predmeti"} style={{

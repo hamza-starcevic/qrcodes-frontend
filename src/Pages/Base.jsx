@@ -8,6 +8,7 @@ import { selectUser } from "../redux/reducers/userSlice.js";
 import { useEffect, useState } from "react";
 import PredmetForm from "../Components/PredmetForm.jsx";
 import PregledPredmeta from "./PregledPredmeta.jsx";
+import PregledKorisnika from "./PregledKorisnika.jsx";
 import { finishLoading, startLoading } from "../redux/reducers/loadingSlice.js";
 
 
@@ -45,6 +46,7 @@ export function Base() {
                     <Route path="/" element={<Layout />} >
                         <Route path={"/"} element={<Home />} />
                         <Route path={"/predmeti"} element={<PregledPredmeta />} />
+                        <Route path={"/korisnici"} element={<PregledKorisnika />} />
                         <Route path={"/profile"} element={<h1>Profile</h1>} />
                     </Route>
                 </Route>
