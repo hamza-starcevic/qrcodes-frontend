@@ -1,32 +1,25 @@
 import { Card, Container, Drawer, ListItemIcon, Stack, Typography } from "@mui/material"
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import KeyboardTabIcon from '@mui/icons-material/KeyboardTab';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import EventIcon from '@mui/icons-material/Event';
-import EditCalendarIcon from '@mui/icons-material/EditCalendar';
-
 
 function Home() {
-  return (
-    < Container sx={{
-        bgcolor:"whiteSmoke",
-        height:"100vh",
-        width:"100%"
-    }}>
-          {/*stack za kartice*/}
-        <Stack direction={"row"} padding={"10vh 0 0 0"} gap={10} sx={{
-            width:"100%",
-            alignItems:"center",
-            justifyContent:"center"
+    return (
+        < Container sx={{
+            bgcolor: "whiteSmoke",
+            height: "100vh",
+            width: "100%"
         }}>
-            
-         {/*korisnici */}
-            <Card sx={{
+            {/*stack za kartice*/}
+            <Stack direction={"row"} padding={"10vh 0 0 0"} gap={10} sx={{
+                width: "100%",
+                alignItems: "center",
+                justifyContent: "center"
+            }}>
+
+                {/*korisnici */}
+                <Card sx={{
                     display: "flex",
                     bgcolor: "#5cab7d",
                     width: "40vh",
@@ -35,18 +28,18 @@ function Home() {
                     flexDirection: "column"
                 }}>
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <AccountCircleIcon sx={{fontSize:"15vh", color:"whitesmoke"}}></AccountCircleIcon>
+                        <AccountCircleIcon sx={{ fontSize: "15vh", color: "whitesmoke" }}></AccountCircleIcon>
                     </div>
-                    <Card sx={{ alignSelf: 'flex-end', width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap:"1vh" }}>
+                    <Card sx={{ alignSelf: 'flex-end', width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: "1vh" }}>
                         <Typography>
                             Korisnici
                         </Typography>
-                        <KeyboardTabIcon/>
+                        <KeyboardTabIcon />
                     </Card>
-            </Card>
-                
-         {/*predmeti */}
-            <Card sx={{
+                </Card>
+
+                {/*predmeti */}
+                <Card sx={{
                     display: "flex",
                     bgcolor: "#233d4d",
                     width: "40vh",
@@ -55,18 +48,18 @@ function Home() {
                     flexDirection: "column"
                 }}>
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <AutoStoriesIcon sx={{fontSize:"15vh", color:"whitesmoke"}} />
+                        <AutoStoriesIcon sx={{ fontSize: "15vh", color: "whitesmoke" }} />
                     </div>
-                    <Card sx={{ alignSelf: 'flex-end', width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap:"1vh" }}>
+                    <Card sx={{ alignSelf: 'flex-end', width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: "1vh" }}>
                         <Typography>
                             Predmeti
                         </Typography>
-                        <KeyboardTabIcon/>
+                        <KeyboardTabIcon />
                     </Card>
-            </Card>
+                </Card>
 
-         {/*predavanja */}
-            <Card sx={{
+                {/*predavanja */}
+                <Card sx={{
                     display: "flex",
                     bgcolor: "#fcca46",
                     width: "40vh",
@@ -75,57 +68,57 @@ function Home() {
                     flexDirection: "column"
                 }}>
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        <EventIcon sx={{fontSize:"15vh", color:"whitesmoke"}} />
+                        <EventIcon sx={{ fontSize: "15vh", color: "whitesmoke" }} />
                     </div>
-                    <Card sx={{ alignSelf: 'flex-end', width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap:"1vh" }}>
+                    <Card sx={{ alignSelf: 'flex-end', width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: "1vh" }}>
                         <Typography>
                             Predavanja
                         </Typography>
-                        <KeyboardTabIcon/>
+                        <KeyboardTabIcon />
                     </Card>
-            </Card>
-        </Stack>
+                </Card>
+            </Stack>
 
-        <Stack>
-        <Stack direction={"row"} padding={"10vh 0 0 0"} gap={10} sx={{
-            width:"100%",
-            alignItems:"center",
-            justifyContent:"center"
-        }}>
-            
-         {/*korisnici */}
-            <Card sx={{
-                display: "flex",
-                bgcolor: "white",
-                width: "150vh",
-                height: "50vh",
-                alignItems: "center",
-                justifyContent:"center",
-                gap:"5vh",
-                flexDirection: "row"
-            }}>
-                    <Card sx={{ width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap:"1vh" }}>
-                        <Typography>
-                            1
-                        </Typography>
-                    </Card>
+            <Stack>
+                <Stack direction={"row"} padding={"10vh 0 0 0"} gap={10} sx={{
+                    width: "100%",
+                    alignItems: "center",
+                    justifyContent: "center"
+                }}>
 
-                    <Card sx={{ width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap:"1vh" }}>
-                        <Typography>
-                            2
-                        </Typography>
-                    </Card>
+                    {/*korisnici */}
+                    <Card sx={{
+                        display: "flex",
+                        bgcolor: "white",
+                        width: "150vh",
+                        height: "50vh",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "5vh",
+                        flexDirection: "row"
+                    }}>
+                        <Card sx={{ width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: "1vh" }}>
+                            <Typography>
+                                1
+                            </Typography>
+                        </Card>
 
-                    <Card sx={{borderRight:"50vh", width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap:"1vh" }}>
-                        <Typography>
-                            3
-                        </Typography>
+                        <Card sx={{ width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: "1vh" }}>
+                            <Typography>
+                                2
+                            </Typography>
+                        </Card>
+
+                        <Card sx={{ borderRight: "50vh", width: '100%', height: '5vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: "1vh" }}>
+                            <Typography>
+                                3
+                            </Typography>
+                        </Card>
                     </Card>
-            </Card>
                 </Stack>
-        </Stack>
-    </Container>
-  )
+            </Stack>
+        </Container>
+    )
 }
 
 export default Home
