@@ -4,6 +4,11 @@ import { Login } from "./Login.jsx";
 import Home from "./Home.jsx";
 import { Stack } from "@mui/system";
 import Sidebar from "../Components/Sidebar.jsx";
+import { selectUser } from "../redux/reducers/userSlice.js";
+import { useEffect, useState } from "react";
+import PredmetForm from "../Components/PredmetForm.jsx";
+import PregledPredmeta from "./PregledPredmeta.jsx";
+import { finishLoading, startLoading } from "../redux/reducers/loadingSlice.js";
 
 
 function Layout() {
@@ -14,11 +19,7 @@ function Layout() {
         </Stack>
     )
 }
-import { selectUser } from "../redux/reducers/userSlice.js";
-import { useEffect, useState } from "react";
-import PredmetForm from "../Components/PredmetForm.jsx";
-import PregledPredmeta from "./PregledPredmeta.jsx";
-import { finishLoading, startLoading } from "../redux/reducers/loadingSlice.js";
+
 
 export function Base() {
     const dispatch = useDispatch();
