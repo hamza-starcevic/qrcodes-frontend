@@ -1,16 +1,18 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Stack, Card, CardHeader, Button, Snackbar, Alert, Modal, Fade, Box } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Stack, Card, CardHeader, Button, Snackbar, Alert, Modal, Fade, Box, IconButton, Menu, MenuItem } from '@mui/material';
 import config, { commons } from '../config';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { finishLoading, startLoading } from '../redux/reducers/loadingSlice';
 import axios from 'axios';
 import PredmetForm from '../Components/PredmetForm';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const columns = [
     { id: 'order', label: 'Rb.', minWidth: 50, align: 'center' },
     { id: 'naziv', label: 'Naziv', minWidth: 100, align: 'center' },
     { id: 'profesor', label: 'Profesor', minWidth: 100, align: 'center' },
     { id: 'godinaStudija', label: 'Godina Studija', minWidth: 100, align: 'center' },
+    { id: 'actions', label: 'Opcije', minWidth: 80, align: 'center' },
 ];
 
 const style = { // Modal Styling
@@ -26,6 +28,15 @@ const style = { // Modal Styling
 };
 
 const PregledPredmeta = () => {
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event, row) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -98,9 +109,25 @@ const PregledPredmeta = () => {
                                 <TableRow key={row.id}>
                                     {columns.map((column) => (
                                         <TableCell key={column.id} align={column.align}>
-                                            {column.id === 'order' ? tableData.indexOf(row) + 1 : row[column.id]}
+                                            {column.id === 'order' ? tableData.indexOf(row) + 1 : column.id === 'actions'
+                                                ? <>
+                                                    <IconButton onClick={(event) => handleClick(event, row)}>
+                                                        <SettingsIcon />
+                                                    </IconButton>
+                                                    <Menu
+                                                        anchorEl={anchorEl} // State variable to store anchor element 
+                                                        open={Boolean(anchorEl)}
+                                                        onClose={handleCloseMenu}
+                                                    >
+                                                        <MenuItem onClick={() => handleAddProfessor(row)}>Dodaj profesora na predmet</MenuItem>
+                                                        <MenuItem onClick={() => handleDeleteSubject(row)}>Obriši predmet</MenuItem>
+                                                    </Menu>
+                                                </>
+                                                : row[column.id]}
                                         </TableCell>
+
                                     ))}
+
                                 </TableRow>
                             ))}
                         </TableBody>
