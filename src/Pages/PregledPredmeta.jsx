@@ -44,13 +44,13 @@ const PregledPredmeta = () => {
     const [openToast, setOpenToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch(startLoading());
         async function fetchData() {
             try {
                 const res = await axios.get(config.BASE_URL + 'api/predmet/all');
                 setTableData(res.data);
-                console.log(res.data);
             } catch (error) {
                 setToastMessage(error.response?.data.detail ?? "Problem u pristupu serveru");
                 setOpenToast(true);

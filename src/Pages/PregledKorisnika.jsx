@@ -45,6 +45,9 @@ const PregledKorisnika = () => {
     const [openToast, setOpenToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
     const dispatch = useDispatch();
+    const handleTableData = (data) => {
+        setTableData(data);
+    }
     useEffect(() => {
         dispatch(startLoading());
         async function fetchData() {
@@ -61,7 +64,7 @@ const PregledKorisnika = () => {
         }
         fetchData();
         console.log(tableData)
-           
+
     }, []);
     return (
         <Container maxWidth="lg">
@@ -144,7 +147,7 @@ const PregledKorisnika = () => {
                 <Fade in={open}>
                     <Box sx={style}>
                         <Container maxWidth="xs">
-                            <KorisnikForm />
+                            <KorisnikForm data={tableData} handleData={handleTableData} />
                         </Container>
                     </Box>
                 </Fade>
