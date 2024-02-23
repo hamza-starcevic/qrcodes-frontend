@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { login } from "../redux/reducers/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { finishLoading, startLoading } from "../redux/reducers/loadingSlice";
 
 const BASE_URL = config.BASE_URL;
 export function LoginForm() {
@@ -19,19 +20,24 @@ export function LoginForm() {
             password: '',
         },
         onSubmit: async values => {
+            dispatch(startLoading());
             try {
 
                 const res = await axios.post(BASE_URL + "api/user/login", values)
                 if (res.status === 200) {
                     dispatch(login(res.data));
                     navigate("/");
+                    dispatch(finishLoading());
+
                 } else {
+                    dispatch(finishLoading());
                     setToastMessage(res.data.detail);
                     setOpenToast(true)
                 }
             }
             catch (error) {
-                setToastMessage(error.response.data.detail);
+                dispatch(finishLoading());
+                setToastMessage(error.response?.data.detail ?? "Problem u pristupu serveru");
                 setOpenToast(true)
             }
         },
