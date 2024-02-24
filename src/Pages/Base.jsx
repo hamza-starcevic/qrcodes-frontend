@@ -26,22 +26,11 @@ function Layout() {
 export function Base() {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
-    const ProtectedRoute = () => {
-
-        useEffect(() => {
-            dispatch(startLoading());
-            // Handle potential asynchronous updates to the user state
-            if (user) { // Check if user state has loaded
-                dispatch(finishLoading());
-            }
-        }, [user]);
-
-        return user.isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
-    }
 
     return (
         <BrowserRouter>
             <Routes>
+                {!user.isLoggedIn && <Route path={"/*"} element={<Login />} />}
                 {!user.isLoggedIn
                     ? <Route path={"/login"} element={<Login />} />
                     :
@@ -51,6 +40,7 @@ export function Base() {
                         <Route path={"/predmeti/dodavanjeKorisnika"} element={<DodavanjeKorisnikaNaPredmet />} />
                         <Route path={"/korisnici"} element={<PregledKorisnika />} />
                         <Route path={"/profile"} element={<h1>Profile</h1>} />
+                        <Route path={"/*"} element={<Navigate to={"/"} />} />
                     </Route>
                 }
             </Routes>

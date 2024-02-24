@@ -142,7 +142,7 @@ const PregledPredmeta = () => {
                                                         open={Boolean(anchorEl)}
                                                         onClose={handleCloseMenu}
                                                     >
-                                                        <MenuItem onClick={() => handleKorisnikDodavanje()}>Dodaj profesora na predmet</MenuItem>
+                                                        <MenuItem onClick={() => handleKorisnikDodavanje()}>Dodaj korisnika na predmet</MenuItem>
                                                         <MenuItem onClick={() => handleDeleteSubject()}>Obriši predmet</MenuItem>
                                                     </Menu>
                                                 </>
