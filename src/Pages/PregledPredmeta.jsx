@@ -28,9 +28,23 @@ const style = { // Modal Styling
 };
 
 const PregledPredmeta = () => {
+    const handleDeleteSubject = async () => {
+        try {
+            let id = activeRow.id;
+            console.log(activeRow)
+            const res = await axios.delete(config.BASE_URL + 'api/predmet/delete/' + id);
+            setTableData(tableData.filter((item) => item.id !== id));
+            handleCloseMenu();
+            setToastMessage("Predmet uspješno obrisan");
+            setOpenToast(true);
+        } catch (error) {
+            setToastMessage(error.response?.data.detail ?? "Problem u pristupu serveru");
+            setOpenToast(true);
+        }
+    }
     const [anchorEl, setAnchorEl] = useState(null);
-
     const handleClick = (event, row) => {
+        setActiveRow(row);
         setAnchorEl(event.currentTarget);
     };
 
@@ -43,23 +57,24 @@ const PregledPredmeta = () => {
     const [tableData, setTableData] = useState([]);
     const [openToast, setOpenToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
+    const [activeRow, setActiveRow] = useState({});
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(startLoading());
-        async function fetchData() {
-            try {
-                const res = await axios.get(config.BASE_URL + 'api/predmet/all');
-                setTableData(res.data);
-            } catch (error) {
-                setToastMessage(error.response?.data.detail ?? "Problem u pristupu serveru");
-                setOpenToast(true);
-            } finally {
-                dispatch(finishLoading());
-            }
+    const fetchData = async () => {
+        try {
+            const res = await axios.get(config.BASE_URL + 'api/predmet/all');
+            setTableData(res.data);
+        } catch (error) {
+            setToastMessage(error.response?.data.detail ?? "Problem u pristupu serveru");
+            setOpenToast(true);
+        } finally {
+            dispatch(finishLoading());
         }
+    }
+    useEffect(() => {
         fetchData();
-        tableData.forEach((predmet) => {
+    }, []);
+    const formatProfesorData = (data) => {
+        data.forEach((predmet) => {
             const profImena = ''
             if (predmet.profesori) {
                 predmet.profesori.forEach((profesor) => {
@@ -71,7 +86,8 @@ const PregledPredmeta = () => {
             }
             predmet.profesor = profImena;
         });
-    }, []);
+    }
+    formatProfesorData(tableData);
     return (
         <Container maxWidth="lg">
             <Stack spacing={6} paddingTop={5}>
@@ -107,6 +123,7 @@ const PregledPredmeta = () => {
                         }>
                             {tableData.map((row) => (
                                 <TableRow key={row.id}>
+                                    {console.log(row.id)}
                                     {columns.map((column) => (
                                         <TableCell key={column.id} align={column.align}>
                                             {column.id === 'order' ? tableData.indexOf(row) + 1 : column.id === 'actions'
@@ -119,8 +136,8 @@ const PregledPredmeta = () => {
                                                         open={Boolean(anchorEl)}
                                                         onClose={handleCloseMenu}
                                                     >
-                                                        <MenuItem onClick={() => handleAddProfessor(row)}>Dodaj profesora na predmet</MenuItem>
-                                                        <MenuItem onClick={() => handleDeleteSubject(row)}>Obriši predmet</MenuItem>
+                                                        <MenuItem onClick={() => handleAddProfessor(row.id)}>Dodaj profesora na predmet</MenuItem>
+                                                        <MenuItem onClick={() => handleDeleteSubject()}>Obriši predmet</MenuItem>
                                                     </Menu>
                                                 </>
                                                 : row[column.id]}

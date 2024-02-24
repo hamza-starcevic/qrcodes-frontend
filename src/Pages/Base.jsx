@@ -24,8 +24,8 @@ function Layout() {
 
 export function Base() {
     const dispatch = useDispatch();
+    const user = useSelector(selectUser);
     const ProtectedRoute = () => {
-        const user = useSelector(selectUser);
 
         useEffect(() => {
             dispatch(startLoading());
