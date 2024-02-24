@@ -1,11 +1,14 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Stack, Card, CardHeader, Button, Snackbar, Alert, Modal, Fade, Box, IconButton, Menu, MenuItem } from '@mui/material';
 import config, { commons } from '../config';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { finishLoading, startLoading } from '../redux/reducers/loadingSlice';
 import axios from 'axios';
 import PredmetForm from '../Components/PredmetForm';
 import SettingsIcon from '@mui/icons-material/Settings';
+import DodavanjeKorisnikaNaPredmet from '../Components/DodavanjeKorisnikaNaPredmet';
+import { setSubjectId } from '../redux/reducers/utilSlice';
+import { useNavigate } from 'react-router';
 
 const columns = [
     { id: 'order', label: 'Rb.', minWidth: 50, align: 'center' },
@@ -31,7 +34,6 @@ const PregledPredmeta = () => {
     const handleDeleteSubject = async () => {
         try {
             let id = activeRow.id;
-            console.log(activeRow)
             const res = await axios.delete(config.BASE_URL + 'api/predmet/delete/' + id);
             setTableData(tableData.filter((item) => item.id !== id));
             handleCloseMenu();
@@ -59,6 +61,7 @@ const PregledPredmeta = () => {
     const [toastMessage, setToastMessage] = useState("");
     const [activeRow, setActiveRow] = useState({});
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const fetchData = async () => {
         try {
             const res = await axios.get(config.BASE_URL + 'api/predmet/all');
@@ -87,7 +90,11 @@ const PregledPredmeta = () => {
             predmet.profesor = profImena;
         });
     }
-    formatProfesorData(tableData);
+    // formatProfesorData(tableData);
+    const handleKorisnikDodavanje = () => {
+        dispatch(setSubjectId(activeRow.id));
+        navigate('/predmeti/dodavanjeKorisnika');
+    }
     return (
         <Container maxWidth="lg">
             <Stack spacing={6} paddingTop={5}>
@@ -95,14 +102,14 @@ const PregledPredmeta = () => {
                     {
                         bgcolor: commons.color.themeGray,
                     }
-                }>
+                } >
                     <Stack direction={'row'} justifyContent={'space-between'} alignContent={'center'}>
                         <CardHeader title="Pregled predmeta" />
                         <Button onClick={handleOpen} variant="contained" color='success' sx={{ my: '1.5vh', mr: '3vh' }}>
                             Dodaj novi predmet
                         </Button>
                     </Stack>
-                </Card>
+                </Card >
                 <TableContainer component={Paper}>
                     <Table aria-label="customized table">
                         <TableHead>
@@ -123,7 +130,6 @@ const PregledPredmeta = () => {
                         }>
                             {tableData.map((row) => (
                                 <TableRow key={row.id}>
-                                    {console.log(row.id)}
                                     {columns.map((column) => (
                                         <TableCell key={column.id} align={column.align}>
                                             {column.id === 'order' ? tableData.indexOf(row) + 1 : column.id === 'actions'
@@ -136,7 +142,7 @@ const PregledPredmeta = () => {
                                                         open={Boolean(anchorEl)}
                                                         onClose={handleCloseMenu}
                                                     >
-                                                        <MenuItem onClick={() => handleAddProfessor(row.id)}>Dodaj profesora na predmet</MenuItem>
+                                                        <MenuItem onClick={() => handleKorisnikDodavanje()}>Dodaj profesora na predmet</MenuItem>
                                                         <MenuItem onClick={() => handleDeleteSubject()}>Obriši predmet</MenuItem>
                                                     </Menu>
                                                 </>
@@ -150,7 +156,7 @@ const PregledPredmeta = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-            </Stack>
+            </Stack >
             <Snackbar
                 open={openToast}
                 autoHideDuration={5000} // Adjust duration as needed
@@ -178,7 +184,8 @@ const PregledPredmeta = () => {
             </Modal>
         </Container >
 
-    );
+    )
+
 };
 
 export default PregledPredmeta;
