@@ -1,34 +1,42 @@
-import { Card, Container, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { Button, Card, Container, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import config from "../config";
-import { useDispatch } from "react-redux";
+import config, { commons } from "../config";
+import { useDispatch, useSelector } from "react-redux";
 import { finishLoading, startLoading } from "../redux/reducers/loadingSlice";
 import axios from "axios";
+import { wipeSubjectId } from "../redux/reducers/utilSlice";
+import { useNavigate } from "react-router";
 
 const DodavanjeKorisnikaNaPredmet = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    let subjectId = useSelector((state) => state.util.subjectId.payload);
     const [role, setRole] = useState('');
     const [users, setUsers] = useState([]);
     const formik = useFormik({
         initialValues: {
-            predmetId: "",
-            korisnikId: "",
+            user: {},
         },
         onSubmit: async (values) => {
-            console.log('hi')
+            let payload = {
+                predmetId: subjectId,
+                korisnikId: values.user.id
+            }
+            console.log(values)
+            console.log(payload)
             dispatch(startLoading());
             try {
-                const res = await axios.post(config.BASE_URL + "api/predmet/create", values)
+                const res = await axios.post(config.BASE_URL + "api/predmet/korisnik", payload)
                 console.log(res.data);
-                dispatch(finishLoading());
             }
 
             catch (error) {
                 dispatch(finishLoading());
             } finally {
                 dispatch(finishLoading());
-                setOpen(false);
+                dispatch(wipeSubjectId());
+                navigate('/predmeti');
             }
         },
     });
@@ -52,8 +60,14 @@ const DodavanjeKorisnikaNaPredmet = () => {
     };
 
     return (
-        <Container maxWidth="lg">
-            <Card>
+        <Container maxWidth="md">
+            <Card
+                sx={{
+                    mt: 5,
+                    p: 3,
+                    bgcolor: commons.color.themeGray,
+                }}
+            >
                 <form onSubmit={formik.handleSubmit}>
                     <FormControl fullWidth sx={{ my: 2 }}>
                         <InputLabel>Odaberi ulogu</InputLabel>
@@ -64,15 +78,20 @@ const DodavanjeKorisnikaNaPredmet = () => {
                     </FormControl>
                     <FormControl fullWidth sx={{ my: 2 }}>
                         <InputLabel>Odaberi korisnika</InputLabel>
-                        <Select value={formik.values.korisnikId} name="korisnikId" onChange={formik.handleChange}>
+                        <Select value={formik.values.user ?? ''} name="user" onChange={formik.handleChange}>
                             {users.map((user) => (
-                                <MenuItem key={user.id} value={user.id}>
+                                <MenuItem key={user.id} value={user}>
                                     {user.firstName} {user.lastName}
                                 </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
-                    {/* Add submit button */}
+                    <Button
+                        type="submit"
+                        variant="contained"
+                    >
+                        Dodaj korisnika
+                    </Button>
                 </form>
             </Card>
         </Container>
