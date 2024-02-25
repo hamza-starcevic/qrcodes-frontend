@@ -5,6 +5,7 @@ import config from "../config";
 import persistReducer from "redux-persist/es/persistReducer";
 import persistStore from "redux-persist/es/persistStore";
 import loadingSlice from "./reducers/loadingSlice";
+import utilSlice from "./reducers/utilSlice";
 
 
 const persistConfig = {
@@ -15,6 +16,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
     user: userSlice,
     loading: loadingSlice,
+    util: utilSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

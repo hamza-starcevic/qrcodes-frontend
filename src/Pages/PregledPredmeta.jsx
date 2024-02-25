@@ -1,11 +1,14 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Container, Stack, Card, CardHeader, Button, Snackbar, Alert, Modal, Fade, Box, IconButton, Menu, MenuItem } from '@mui/material';
 import config, { commons } from '../config';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { finishLoading, startLoading } from '../redux/reducers/loadingSlice';
 import axios from 'axios';
 import PredmetForm from '../Components/PredmetForm';
 import SettingsIcon from '@mui/icons-material/Settings';
+import DodavanjeKorisnikaNaPredmet from '../Components/DodavanjeKorisnikaNaPredmet';
+import { setSubjectId } from '../redux/reducers/utilSlice';
+import { useNavigate } from 'react-router';
 
 const columns = [
     { id: 'order', label: 'Rb.', minWidth: 50, align: 'center' },
@@ -28,9 +31,22 @@ const style = { // Modal Styling
 };
 
 const PregledPredmeta = () => {
+    const handleDeleteSubject = async () => {
+        try {
+            let id = activeRow.id;
+            const res = await axios.delete(config.BASE_URL + 'api/predmet/delete/' + id);
+            setTableData(tableData.filter((item) => item.id !== id));
+            handleCloseMenu();
+            setToastMessage("Predmet uspješno obrisan");
+            setOpenToast(true);
+        } catch (error) {
+            setToastMessage(error.response?.data.detail ?? "Problem u pristupu serveru");
+            setOpenToast(true);
+        }
+    }
     const [anchorEl, setAnchorEl] = useState(null);
-
     const handleClick = (event, row) => {
+        setActiveRow(row);
         setAnchorEl(event.currentTarget);
     };
 
@@ -43,23 +59,25 @@ const PregledPredmeta = () => {
     const [tableData, setTableData] = useState([]);
     const [openToast, setOpenToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
+    const [activeRow, setActiveRow] = useState({});
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(startLoading());
-        async function fetchData() {
-            try {
-                const res = await axios.get(config.BASE_URL + 'api/predmet/all');
-                setTableData(res.data);
-            } catch (error) {
-                setToastMessage(error.response?.data.detail ?? "Problem u pristupu serveru");
-                setOpenToast(true);
-            } finally {
-                dispatch(finishLoading());
-            }
+    const navigate = useNavigate();
+    const fetchData = async () => {
+        try {
+            const res = await axios.get(config.BASE_URL + 'api/predmet/all');
+            setTableData(res.data);
+        } catch (error) {
+            setToastMessage(error.response?.data.detail ?? "Problem u pristupu serveru");
+            setOpenToast(true);
+        } finally {
+            dispatch(finishLoading());
         }
+    }
+    useEffect(() => {
         fetchData();
-        tableData.forEach((predmet) => {
+    }, []);
+    const formatProfesorData = (data) => {
+        data.forEach((predmet) => {
             const profImena = ''
             if (predmet.profesori) {
                 predmet.profesori.forEach((profesor) => {
@@ -71,7 +89,12 @@ const PregledPredmeta = () => {
             }
             predmet.profesor = profImena;
         });
-    }, []);
+    }
+    // formatProfesorData(tableData);
+    const handleKorisnikDodavanje = () => {
+        dispatch(setSubjectId(activeRow.id));
+        navigate('/predmeti/dodavanjeKorisnika');
+    }
     return (
         <Container maxWidth="lg">
             <Stack spacing={6} paddingTop={5}>
@@ -79,14 +102,14 @@ const PregledPredmeta = () => {
                     {
                         bgcolor: commons.color.themeGray,
                     }
-                }>
+                } >
                     <Stack direction={'row'} justifyContent={'space-between'} alignContent={'center'}>
                         <CardHeader title="Pregled predmeta" />
                         <Button onClick={handleOpen} variant="contained" color='success' sx={{ my: '1.5vh', mr: '3vh' }}>
                             Dodaj novi predmet
                         </Button>
                     </Stack>
-                </Card>
+                </Card >
                 <TableContainer component={Paper}>
                     <Table aria-label="customized table">
                         <TableHead>
@@ -119,8 +142,8 @@ const PregledPredmeta = () => {
                                                         open={Boolean(anchorEl)}
                                                         onClose={handleCloseMenu}
                                                     >
-                                                        <MenuItem onClick={() => handleAddProfessor(row)}>Dodaj profesora na predmet</MenuItem>
-                                                        <MenuItem onClick={() => handleDeleteSubject(row)}>Obriši predmet</MenuItem>
+                                                        <MenuItem onClick={() => handleKorisnikDodavanje()}>Dodaj korisnika na predmet</MenuItem>
+                                                        <MenuItem onClick={() => handleDeleteSubject()}>Obriši predmet</MenuItem>
                                                     </Menu>
                                                 </>
                                                 : row[column.id]}
@@ -133,7 +156,7 @@ const PregledPredmeta = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-            </Stack>
+            </Stack >
             <Snackbar
                 open={openToast}
                 autoHideDuration={5000} // Adjust duration as needed
@@ -161,7 +184,8 @@ const PregledPredmeta = () => {
             </Modal>
         </Container >
 
-    );
+    )
+
 };
 
 export default PregledPredmeta;

@@ -11,6 +11,8 @@ import PregledPredmeta from "./PregledPredmeta.jsx";
 import PregledKorisnika from "./PregledKorisnika.jsx";
 import { finishLoading, startLoading } from "../redux/reducers/loadingSlice.js";
 import PregledPredavanja from "./PregledPredavanja.jsx";
+import DodavanjeKorisnikaNaPredmet from "../Components/DodavanjeKorisnikaNaPredmet.jsx";
+
 
 
 function Layout() {
@@ -25,34 +27,29 @@ function Layout() {
 
 export function Base() {
     const dispatch = useDispatch();
-    const ProtectedRoute = () => {
-        const user = useSelector(selectUser);
-
-        useEffect(() => {
-            dispatch(startLoading());
-            // Handle potential asynchronous updates to the user state
-            if (user) { // Check if user state has loaded
-                dispatch(finishLoading());
-            }
-        }, [user]);
-
-        return user.isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
-    }
+    const user = useSelector(selectUser);
 
     return (
-      <BrowserRouter>
-        <Routes>
-          <Route path={"/login"} element={<Login />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Layout />}>
-              <Route path={"/"} element={<Home />} />
-              <Route path={"/predmeti"} element={<PregledPredmeta />} />
-              <Route path={"/korisnici"} element={<PregledKorisnika />} />
-              <Route path={"/predavanja"} element={<PregledPredavanja />} />
-              <Route path={"/profile"} element={<h1>Profile</h1>} />
-            </Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    );
+
+
+
+        <BrowserRouter>
+            <Routes>
+                {!user.isLoggedIn && <Route path={"/*"} element={<Login />} />}
+                {!user.isLoggedIn
+                    ? <Route path={"/login"} element={<Login />} />
+                    :
+                    <Route path="/" element={<Layout />} >
+                        <Route path={"/"} element={<Home />} />
+                        <Route path={"/predmeti"} element={<PregledPredmeta />} />
+                        <Route path={"/predmeti/dodavanjeKorisnika"} element={<DodavanjeKorisnikaNaPredmet />} />
+                        <Route path={"/korisnici"} element={<PregledKorisnika />} />
+                        <Route path={"/predavanja"} element={<PregledPredavanja />} />
+                        <Route path={"/profile"} element={<h1>Profile</h1>} />
+                        <Route path={"/*"} element={<Navigate to={"/"} />} />
+                    </Route>
+                }
+            </Routes>
+        </BrowserRouter >
+    )
 }

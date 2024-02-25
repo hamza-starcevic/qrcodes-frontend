@@ -5,8 +5,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { Link } from "react-router-dom";
 import { commons } from "../config";
-import { useSelector } from "react-redux";
-import { selectUser } from "../redux/reducers/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, selectUser } from "../redux/reducers/userSlice";
 import { bgcolor } from "@mui/system";
 
 
@@ -21,15 +21,19 @@ const MenuItems = [
         icon: <InfoIcon sx={{ color: "white" }} />,
         path: "/about"
     },
-    {
-        text: "Logout",
-        icon: <LogoutIcon sx={{ color: "white" }} />,
-        path: "/login"
-    }
+    // {
+    //     text: "Logout",
+    //     icon: <LogoutIcon sx={{ color: "white" }} onClick={handleLogout()} />,
+    //     path: "/login"
+    // }
 ]
 
 function Sidebar() {
     const user = useSelector(selectUser);
+    const dispatch = useDispatch();
+    const handleLogout = () => {
+        dispatch(logout());
+    }
     return (
         <Drawer
             open={true}
@@ -83,6 +87,27 @@ function Sidebar() {
                             </Button>
                         </ListItem>
                     ))}
+                    <ListItem>
+                        <Button
+                            fullWidth
+                            variant="text"
+                            color="inherit"
+                            onClick={handleLogout}
+                            sx={{
+
+                                margin: 0,
+
+                                '&:hover': {
+                                    bgcolor: commons.color.themeTourquise,
+                                    color: "white"
+                                }
+                            }}>
+                            <Link to={"/"} style={{ width: '30vh', textDecoration: 'none', color: 'inherit', display: 'flex', flexDirection: 'row', alignItems: "center", justifyContent: "flex-end" }}>
+                                <ListItemIcon ><LogoutIcon sx={{ color: "white" }} /></ListItemIcon>
+                                <ListItemText primary={"Logout"} />
+                            </Link>
+                        </Button>
+                    </ListItem>
                 </Stack>
             </List>
         </Drawer >

@@ -32,18 +32,35 @@ const PregledKorisnika = () => {
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = (event, row) => {
+        setActiveRow(row);
         setAnchorEl(event.currentTarget);
     };
 
     const handleCloseMenu = () => {
         setAnchorEl(null);
     };
+
+    const handleDeleteSubject = async () => {
+        try {
+            let id = activeRow.id;
+            const res = await axios.delete(config.BASE_URL + 'api/user/delete/' + id);
+            setTableData(tableData.filter((item) => item.id !== id));
+            handleCloseMenu();
+            setToastMessage("Korisnik uspješno obrisan");
+            setOpenToast(true);
+        } catch (error) {
+            setToastMessage(error.response?.data.detail ?? "Problem u pristupu serveru");
+            setOpenToast(true);
+        }
+    }
+
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [tableData, setTableData] = useState([]);
     const [openToast, setOpenToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
+    const [activeRow, setActiveRow] = useState({});
     const dispatch = useDispatch();
     const handleTableData = (data) => {
         setTableData(data);
@@ -54,7 +71,6 @@ const PregledKorisnika = () => {
             try {
                 const res = await axios.get(config.BASE_URL + 'api/user/all');
                 setTableData(res.data);
-                console.log(res.data);
             } catch (error) {
                 setToastMessage(error.response?.data.detail ?? "Problem u pristupu serveru");
                 setOpenToast(true);
@@ -63,7 +79,6 @@ const PregledKorisnika = () => {
             }
         }
         fetchData();
-        console.log(tableData)
 
     }, []);
     return (
@@ -113,7 +128,7 @@ const PregledKorisnika = () => {
                                                         open={Boolean(anchorEl)}
                                                         onClose={handleCloseMenu}
                                                     >
-                                                        <MenuItem onClick={() => handleDeleteSubject(row)}>Obriši korisnika</MenuItem>
+                                                        <MenuItem onClick={() => handleDeleteSubject()}>Obriši korisnika</MenuItem>
                                                     </Menu>
                                                 </>
                                                 : row[column.id]}
