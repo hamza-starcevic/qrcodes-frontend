@@ -10,6 +10,7 @@ import PredmetForm from "../Components/PredmetForm.jsx";
 import PregledPredmeta from "./PregledPredmeta.jsx";
 import PregledKorisnika from "./PregledKorisnika.jsx";
 import { finishLoading, startLoading } from "../redux/reducers/loadingSlice.js";
+import PregledPredavanja from "./PregledPredavanja.jsx";
 
 
 function Layout() {
@@ -39,18 +40,19 @@ export function Base() {
     }
 
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path={"/login"} element={<Login />} />
-                <Route element={<ProtectedRoute />} >
-                    <Route path="/" element={<Layout />} >
-                        <Route path={"/"} element={<Home />} />
-                        <Route path={"/predmeti"} element={<PregledPredmeta />} />
-                        <Route path={"/korisnici"} element={<PregledKorisnika />} />
-                        <Route path={"/profile"} element={<h1>Profile</h1>} />
-                    </Route>
-                </Route>
-            </Routes>
-        </BrowserRouter>
-    )
+      <BrowserRouter>
+        <Routes>
+          <Route path={"/login"} element={<Login />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<Layout />}>
+              <Route path={"/"} element={<Home />} />
+              <Route path={"/predmeti"} element={<PregledPredmeta />} />
+              <Route path={"/korisnici"} element={<PregledKorisnika />} />
+              <Route path={"/predavanja"} element={<PregledPredavanja />} />
+              <Route path={"/profile"} element={<h1>Profile</h1>} />
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    );
 }
