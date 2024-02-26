@@ -97,6 +97,10 @@ const PregledPredavanja = () => {
     setAnchorEl(null);
   };
 
+  const addToData = (newData) => {
+    setTableData([...tableData, newData]);
+  };
+
   const handleOpen = () => setOpen(true);
 
   const handleClose = () => setOpen(false);
@@ -212,7 +216,7 @@ const PregledPredavanja = () => {
         <Fade in={open}>
 
           <Container maxWidth="xs">
-            <PredavanjeForm predmetId={''} />
+            <PredavanjeForm predmetId={''} handleClose={handleClose} addToData={addToData} />
           </Container>
 
         </Fade>

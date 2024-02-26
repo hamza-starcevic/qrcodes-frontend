@@ -62,6 +62,9 @@ const PregledPredmeta = () => {
     const [activeRow, setActiveRow] = useState({});
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const updateData = (data) => {
+        setTableData([...tableData, data]);
+    }
     const fetchData = async () => {
         try {
             const res = await axios.get(config.BASE_URL + 'api/predmet/all');
@@ -177,7 +180,7 @@ const PregledPredmeta = () => {
                 <Fade in={open}>
                     <Box sx={style}>
                         <Container maxWidth="xs">
-                            <PredmetForm />
+                            <PredmetForm handleClose={handleClose} updateData={updateData} />
                         </Container>
                     </Box>
                 </Fade>

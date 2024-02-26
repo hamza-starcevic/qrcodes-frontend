@@ -53,7 +53,14 @@ function ProfesorPredmet() {
     const [qrCodeData, setQrCodeData] = useState("");
     const [qrModalOpen, setQrModalOpen] = useState(false);
     const [activeRow, setActiveRow] = useState({});
+    const [attendanceModalOpen, setAttendanceModalOpen] = useState(false);
+    const [currentAttendanceData, setCurrentAttendanceData] = useState(null);
     const dispatch = useDispatch();
+
+    const openAttendanceModal = (rowData) => {
+        setCurrentAttendanceData(rowData); // Assuming attendance is linked to rowData
+        setAttendanceModalOpen(true);
+    };
     let predmetId = useSelector((state) => state.util.subjectId.payload);
 
     const fetchData = async () => {
@@ -84,6 +91,9 @@ function ProfesorPredmet() {
         setAnchorEl(null);
     };
 
+    const addToData = (newData) => {
+        setTableData([...tableData, newData]);
+    };
     const handleOpen = () => setOpen(true);
 
     const handleClose = () => setOpen(false);
@@ -132,7 +142,7 @@ function ProfesorPredmet() {
                                         align={column.align}
                                         sx={{ minWidth: column.minWidth, color: "white" }}
                                     >
-                                        {column.label}
+                                        {column.id === "predmet" ? "Prisustvo" : column.label}
                                     </TableCell>
                                 ))}
                             </TableRow>
@@ -171,9 +181,9 @@ function ProfesorPredmet() {
                                                     </Menu>
                                                 </>
                                             ) : column.id === "predmet" ? (
-                                                predmetiData.find(
-                                                    (predmet) => predmet.id === row.predmet_id
-                                                )?.naziv
+                                                <Button onClick={() => openAttendanceModal(row)}>
+                                                    Pogledaj prisustva
+                                                </Button>
                                             ) : (
                                                 row[column.id]
                                             )}
@@ -199,7 +209,7 @@ function ProfesorPredmet() {
                 <Fade in={open}>
 
                     <Container maxWidth="xs">
-                        <PredavanjeForm predmetId={predmetId} />
+                        <PredavanjeForm predmetId={predmetId} handleClose={handleClose} addToData={addToData} />
                     </Container>
 
                 </Fade>
@@ -225,8 +235,76 @@ function ProfesorPredmet() {
                     }} />
                 </Container>
             </Modal>
+            <Modal open={attendanceModalOpen} onClose={() => setAttendanceModalOpen(false)}>
+                <Fade in={attendanceModalOpen}>
+                    <Container maxWidth="xs">
+                        {/* Replace with the component to display attendance list */}
+                        <AttendanceList attendanceData={currentAttendanceData} />
+                    </Container>
+                </Fade>
+            </Modal>
         </Container>
     )
 }
-
+const AttendanceList = ({ attendanceData, closeModal }) => {
+    const [users, setUsers] = useState([]);
+    const fetchUsers = async () => {
+        try {
+            const res = await axios.get(config.BASE_URL + "api/predavanje/" + attendanceData.id + "/prisutni");
+            setUsers(res.data);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+        }
+    };
+    useEffect(() => {
+        try {
+            fetchUsers();
+        } catch (error) {
+            console.error("Error fetching users:", error);
+        }
+    }, []);
+    return (
+        <Card sx={
+            {
+                bgcolor: commons.color.themeGray,
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: "80vh",
+                height: "80vh",
+                p: 4,
+                position: "absolute",
+            }
+        }>
+            <Stack spacing={6} paddingTop={5}>
+                <TableContainer component={Paper}>
+                    <Table aria-label="customized table">
+                        <TableHead sx={{ bgcolor: commons.color.themeDarkBlue }}>
+                            <TableRow>
+                                <TableCell sx={{ minWidth: 150, color: "white", }} align="center">
+                                    Ime
+                                </TableCell>
+                                <TableCell sx={{ minWidth: 150, color: "white" }} align="center">
+                                    Prezime
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody sx={{ bgcolor: commons.color.themeGray }}>
+                            {users.map((row) => (
+                                <TableRow key={row.id}>
+                                    <TableCell align="center">
+                                        {row.imePrezime.split(" ")[0]}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {row.imePrezime.split(" ")[1]}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Stack>
+        </Card>
+    );
+};
 export default ProfesorPredmet

@@ -21,7 +21,7 @@ import { DateField, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 
-const PredmetForm = ({ predmetId }) => {
+const PredmetForm = ({ predmetId, handleClose, addToData }) => {
   const [hasPredmetId, setHasPredmetId] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const dispatch = useDispatch();
@@ -50,12 +50,13 @@ const PredmetForm = ({ predmetId }) => {
           config.BASE_URL + "api/predavanje/create",
           values
         );
-        console.log(res.data);
+        addToData(res.data);
         dispatch(finishLoading());
       } catch (error) {
         dispatch(finishLoading());
       } finally {
         dispatch(finishLoading());
+        handleClose();
       }
     },
   });

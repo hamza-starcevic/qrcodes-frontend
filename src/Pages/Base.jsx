@@ -30,6 +30,11 @@ function Layout() {
 export function Base() {
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
+    const [role, setRole] = useState(user.role);
+    useEffect(() => {
+        setRole(user.role);
+    }, [user.role])
+
 
     return (
 
@@ -42,15 +47,26 @@ export function Base() {
                     ? <Route path={"/login"} element={<Login />} />
                     :
                     <Route path="/" element={<Layout />} >
-                        <Route path={"/"} element={<Home />} />
-                        <Route path={"/predmeti"} element={<PregledPredmeta />} />
-                        <Route path={"/predmeti/dodavanjeKorisnika"} element={<DodavanjeKorisnikaNaPredmet />} />
-                        <Route path={"/korisnici"} element={<PregledKorisnika />} />
-                        <Route path={"/predavanja"} element={<PregledPredavanja />} />
-                        <Route path={"/profile"} element={<h1>Profile</h1>} />
-                        <Route path={"/profesor"} element={<ProfesorHome />} />
-                        <Route path={"/profesor/predmet"} element={<ProfesorPredmet />} />
-                        <Route path={"/*"} element={<Navigate to={"/"} />} />
+                        {role === "admin" && (
+                            <>
+                                <Route path={"/"} element={<Home />} />
+                                <Route path={"/predmeti"} element={<PregledPredmeta />} />
+                                <Route path={"/predmeti/dodavanjeKorisnika"} element={<DodavanjeKorisnikaNaPredmet />} />
+                                <Route path={"/korisnici"} element={<PregledKorisnika />} />
+                                <Route path={"/predavanja"} element={<PregledPredavanja />} />
+                                <Route path={"/profile"} element={<h1>Profile</h1>} />
+                                <Route path={"/*"} element={<Navigate to={"/"} />} />
+                            </>
+                        )}
+                        {role === "profesor" && (
+                            <>
+                                <Route path={"/"} element={<ProfesorHome />} />
+                                <Route path={"/profesor"} element={<ProfesorHome />} />
+                                <Route path={"/profesor/predmet"} element={<ProfesorPredmet />} />
+                                <Route path={"/*"} element={<Navigate to={"/"} />} />
+                            </>
+                        )}
+
                     </Route>
                 }
             </Routes>

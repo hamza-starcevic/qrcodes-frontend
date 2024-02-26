@@ -8,6 +8,7 @@ const initialState = {
     isLoggedIn: false,
     token: '',
     dateOfBirth: '',
+    role: '',
 };
 
 const userSlice = createSlice(
@@ -24,10 +25,12 @@ const userSlice = createSlice(
                 state.dateOfBirth = action.payload.dateOfBirth;
                 state.email = action.payload.email;
                 state.token = action.payload.token;
+                state.role = action.payload.role;
             },
             logout: (state) => {
                 // Update state for user logout (e.g., Reset to initial values)
                 state.token = null;
+                state.role = null;
                 state.isLoggedIn = false;
             },
             updatePreferences: (state, action) => {

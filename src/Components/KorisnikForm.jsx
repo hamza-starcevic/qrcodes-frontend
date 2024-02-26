@@ -25,7 +25,7 @@ import {
 const years = Array.from({ length: 6 }, (_, i) => i + 1);
 
 const KorisnikForm = ({
-  data, handleTableData
+  data, handleTableData, handleClose
 }) => {
   const [selectedDate, setSelectedDate] = useState('');
 
@@ -44,19 +44,20 @@ const KorisnikForm = ({
       const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
       const day = String(date.getDate()).padStart(2, '0');
       values.dateOfBirth = `${year}-${month}-${day}`;
-      console.log(values);
       dispatch(startLoading());
       try {
         const res = await axios.post(
           config.BASE_URL + "api/user/create",
           values
         );
-        handleTableData([...data, values]);
+        console.log(res.data)
+        handleTableData(res.data);
         dispatch(finishLoading());
       } catch (error) {
         dispatch(finishLoading());
       } finally {
         dispatch(finishLoading());
+        handleClose();
       }
     },
   });

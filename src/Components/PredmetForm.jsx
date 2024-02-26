@@ -20,7 +20,7 @@ import axios from "axios";
 
 const years = Array.from({ length: 6 }, (_, i) => i + 1);
 
-const PredmetForm = () => {
+const PredmetForm = ({ handleClose, updateData }) => {
     const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {
@@ -32,13 +32,14 @@ const PredmetForm = () => {
             dispatch(startLoading());
             try {
                 const res = await axios.post(config.BASE_URL + "api/predmet/create", values)
-                console.log(res.data);
+                updateData(res.data);
                 dispatch(finishLoading());
             }
 
             catch (error) {
                 dispatch(finishLoading());
             } finally {
+                handleClose();
                 dispatch(finishLoading());
             }
         },

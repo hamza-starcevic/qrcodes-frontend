@@ -9,8 +9,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 
 const columns = [
     { id: 'order', label: 'Rb.', minWidth: 50, align: 'center' },
-    { id: 'first_name', label: 'Ime', minWidth: 100, align: 'center' },
-    { id: 'last_name', label: 'Prezime', minWidth: 100, align: 'center' },
+    { id: 'firstName', label: 'Ime', minWidth: 100, align: 'center' },
+    { id: 'lastName', label: 'Prezime', minWidth: 100, align: 'center' },
     { id: 'email', label: 'Email', minWidth: 100, align: 'center' },
     { id: 'role', label: 'Role', minWidth: 100, align: 'center' },
     { id: 'actions', label: 'Opcije', minWidth: 80, align: 'center' },
@@ -63,7 +63,7 @@ const PregledKorisnika = () => {
     const [activeRow, setActiveRow] = useState({});
     const dispatch = useDispatch();
     const handleTableData = (data) => {
-        setTableData(data);
+        setTableData([...tableData, data]);
     }
     useEffect(() => {
         dispatch(startLoading());
@@ -162,7 +162,7 @@ const PregledKorisnika = () => {
                 <Fade in={open}>
                     <Box sx={style}>
                         <Container maxWidth="xs">
-                            <KorisnikForm data={tableData} handleData={handleTableData} />
+                            <KorisnikForm data={tableData} handleTableData={handleTableData} handleClose={handleClose} />
                         </Container>
                     </Box>
                 </Fade>
