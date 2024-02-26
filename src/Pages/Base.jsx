@@ -12,6 +12,8 @@ import PregledKorisnika from "./PregledKorisnika.jsx";
 import { finishLoading, startLoading } from "../redux/reducers/loadingSlice.js";
 import PregledPredavanja from "./PregledPredavanja.jsx";
 import DodavanjeKorisnikaNaPredmet from "../Components/DodavanjeKorisnikaNaPredmet.jsx";
+import ProfesorHome from "./ProfesorPages/ProfesorHome.jsx";
+import ProfesorPredmet from "./ProfesorPages/ProfesorPredmet.jsx";
 
 
 
@@ -46,6 +48,8 @@ export function Base() {
                         <Route path={"/korisnici"} element={<PregledKorisnika />} />
                         <Route path={"/predavanja"} element={<PregledPredavanja />} />
                         <Route path={"/profile"} element={<h1>Profile</h1>} />
+                        <Route path={"/profesor"} element={<ProfesorHome />} />
+                        <Route path={"/profesor/predmet"} element={<ProfesorPredmet />} />
                         <Route path={"/*"} element={<Navigate to={"/"} />} />
                     </Route>
                 }

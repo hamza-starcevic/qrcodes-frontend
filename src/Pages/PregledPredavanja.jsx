@@ -1,3 +1,11 @@
+import QRCode from "qrcode.react";
+import config, { commons } from "../config";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { finishLoading, startLoading } from "../redux/reducers/loadingSlice";
+import axios from "axios";
+import PredavanjeForm from "../Components/PredavanjeForm";
+import SettingsIcon from "@mui/icons-material/Settings";
 import {
   Table,
   TableBody,
@@ -15,19 +23,10 @@ import {
   Alert,
   Modal,
   Fade,
-  Box,
   IconButton,
   Menu,
   MenuItem,
 } from "@mui/material";
-import QRCode from "qrcode.react";
-import config, { commons } from "../config";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { finishLoading, startLoading } from "../redux/reducers/loadingSlice";
-import axios from "axios";
-import PredavanjeForm from "../Components/PredavanjeForm";
-import SettingsIcon from "@mui/icons-material/Settings";
 
 const columns = [
   { id: "order", label: "Rb.", minWidth: 50, align: "center" },
@@ -41,12 +40,12 @@ const columns = [
   { id: "actions", label: "Opcije", minWidth: 80, align: "center" },
 ];
 
-const style = { 
+const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "60vh", 
+  width: "60vh",
   bgcolor: "background.paper",
   boxShadow: 24,
   py: 4,
@@ -61,6 +60,7 @@ const PregledPredavanja = () => {
   const [toastMessage, setToastMessage] = useState("");
   const [qrCodeData, setQrCodeData] = useState("");
   const [qrModalOpen, setQrModalOpen] = useState(false);
+  const [activeRow, setActiveRow] = useState({});
   const dispatch = useDispatch();
 
   async function fetchData() {
@@ -89,6 +89,7 @@ const PregledPredavanja = () => {
   }, []);
 
   const handleClick = (event, row) => {
+    setActiveRow(row);
     setAnchorEl(event.currentTarget);
   };
 
@@ -101,7 +102,7 @@ const PregledPredavanja = () => {
   const handleClose = () => setOpen(false);
 
   const generateQRCode = (data) => {
-    setQrCodeData(data);
+    setQrCodeData(activeRow.id);
     setQrModalOpen(true);
   };
 
@@ -176,7 +177,7 @@ const PregledPredavanja = () => {
                               Obriši predavanje
                             </MenuItem>
                             <MenuItem
-                              onClick={() => generateQRCode(row.qrcode)}
+                              onClick={() => generateQRCode(row.id)}
                             >
                               QR Code
                             </MenuItem>
@@ -209,15 +210,15 @@ const PregledPredavanja = () => {
       </Snackbar>
       <Modal open={open} onClose={handleClose} closeAfterTransition>
         <Fade in={open}>
-          <Box sx={style}>
-            <Container maxWidth="xs">
-              <PredavanjeForm />
-            </Container>
-          </Box>
+
+          <Container maxWidth="xs">
+            <PredavanjeForm predmetId={''} />
+          </Container>
+
         </Fade>
       </Modal>
       <Modal open={qrModalOpen} onClose={() => setQrModalOpen(false)}>
-        <Box
+        <Container
           sx={{
             position: "absolute",
             top: "50%",
@@ -231,7 +232,7 @@ const PregledPredavanja = () => {
           }}
         >
           <QRCode value={qrCodeData} />
-        </Box>
+        </Container>
       </Modal>
     </Container>
   );
